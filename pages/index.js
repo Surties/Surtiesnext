@@ -8,7 +8,7 @@ import { Box, Center, Flex, Spinner, Text } from "@chakra-ui/react";
 import { LOGIN_LOADING } from "../redux/auth/auth.actiontype";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import Sidebar from "../Components/Sidebar";
+import Sidebar from "../components/Sidebar";
 import ImageSlider from "../components/ImageSlider";
 import BreakingNews from "../components/BreakingNews";
 import CategorizedNews from "../components/CategorizedNews";

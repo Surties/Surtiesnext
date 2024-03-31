@@ -6,7 +6,7 @@ import axios from "axios";
 import StickyBox from "react-sticky-box";
 
 import { useRouter } from "next/router";
-import Sidebar from "../../../Components/Sidebar";
+import Sidebar from "../../../components/Sidebar";
 import NewsCard from "../../../components/NewsCard";
 import Navbar from "../../../components/Navbar";
 

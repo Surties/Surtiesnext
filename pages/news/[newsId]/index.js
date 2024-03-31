@@ -6,7 +6,7 @@ import StickyBox from "react-sticky-box";
 
 import axios from "axios";
 import { useRouter } from "next/router";
-import Sidebar from "../../../Components/Sidebar";
+import Sidebar from "../../../components/Sidebar";
 import DetailNewsComponent from "../../../components/DetailNewsComponent";
 import ShareOn from "../../../components/ShareOn";
 import RecommendNews from "../../../components/RecommendedNews";
