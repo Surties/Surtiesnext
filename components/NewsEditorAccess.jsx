@@ -8,15 +8,11 @@ function NewsEditorAccess({ children }) {
   const { role, auth } = useSelector((store) => {
     return store.auth;
   });
-  const router = useRouter();
-  if (auth) {
-    if (role === "newsEditor" || role === "admin") {
-      return <>{children}</>;
-    } else {
-      return <UnAuthorized />;
-    }
+
+  if (role === "newsEditor" || role === "admin") {
+    return <>{children}</>;
   } else {
-    router.push("/");
+    return <UnAuthorized />;
   }
 }
 

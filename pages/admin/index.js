@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { Box, Button, Center } from "@chakra-ui/react";
 import NewsEditorAccess from "../../components/NewsEditorAccess";
 import AdminNewsForm from "../../components/AdminNewsForm";
@@ -9,14 +9,22 @@ import UpdateNews from "../../components/UpdateNews";
 import Navbar from "../../components/Navbar";
 
 function Admin() {
-  const [activeComponent, setActiveComponent] = useState(
-    <NewsEditorAccess>
-      <AdminNewsForm />
-    </NewsEditorAccess>
-  );
+  const router = useRouter();
+  const [activeComponent, setActiveComponent] = useState(null);
+
+  // Check if component is mounted to avoid SSR errors
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Client-side code that uses useRouter
+      const { id } = router.query;
+      console.log("ID from query:", id);
+    }
+  }, [router.query]);
+
   const renderComponent = (component) => {
     setActiveComponent(component);
   };
+
   return (
     <>
       <Navbar />
