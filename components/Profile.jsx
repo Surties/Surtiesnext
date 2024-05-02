@@ -22,7 +22,8 @@ import axios from "axios";
 
 import { storage } from "../firebase/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { EMAIL_UPDATE } from "../Redux/auth/auth.actiontype";
+import { EMAIL_UPDATE } from "../redux/auth/auth.actiontype";
+
 const Profile = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -226,4 +227,3 @@ const Profile = () => {
   );
 };
 export default Profile;
-
