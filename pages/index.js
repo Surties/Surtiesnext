@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ImageSlider from "../Components/ImageSlider";
+import ImageSlider from "../components/ImageSlider";
 import axios from "axios";
 import StickyBox from "react-sticky-box";
 
 import { Box, Center, Flex, Spinner, Text } from "@chakra-ui/react";
 import CategorizedNews from "../components/CategorizedNews";
 
-import BreakingNews from "../Components/BreakingNews";
+import BreakingNews from "../components/BreakingNews";
 import Sidebar from "../components/Sidebar";
 import { LOGIN_LOADING, LOGIN_SUCCESS } from "../redux/auth/auth.actiontype";
 import { useDispatch } from "react-redux";
