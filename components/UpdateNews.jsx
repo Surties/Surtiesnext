@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -13,28 +13,21 @@ import {
   Grid,
   Spinner,
 } from "@chakra-ui/react";
-import Searchbar from "./Searchbar";
-import Filtering from "./Filtering";
-import { FaFilter } from "react-icons/fa";
 import UpdateNewsModal from "./UpdateNewsModal";
 import Pagination from "./Pagination";
+import Searchbar from "./Searchbar";
+import { FaFilter } from "react-icons/fa";
+import Filtering from "./Filtering";
 
 const cata = [
-  "top",
-  "latest",
-  "cricket",
-  "election",
-  "surties",
-  "state_city",
-  "entertainment",
-  "life_style",
-  "job/eduction",
-  "women",
   "country",
-  "forign",
-  "horoscope",
-  "tech",
-  "sports",
+  "gujrat",
+  "Surat",
+  "National",
+  "entertainment",
+  "cricket",
+  "religion",
+  "surties",
 ];
 function UpdateNews() {
   const [newsData, setNewsData] = useState([]);
@@ -151,10 +144,10 @@ function UpdateNews() {
                   />
                 </Center>
                 <Text fontSize="xl" mt={2}>
-                  {newsItem.heading.slice(0, 60) + "..."}
+                  {newsItem.heading}
                 </Text>
                 <Text fontSize="md" mt={2}>
-                  {newsItem.subHeading.slice(0, 100) + "..."}
+                  {newsItem.subHeading}
                 </Text>
                 <Flex
                   justifyContent={"space-between"}
@@ -163,9 +156,7 @@ function UpdateNews() {
                   spacing={4}
                   align="center"
                 >
-                  <Badge colorScheme="green">
-                    {`${newsItem.catagory[0]} ${newsItem.catagory[1]}`}
-                  </Badge>
+                  <Badge colorScheme="green">{`${newsItem.catagory} `}</Badge>
                   <Text>{new Date(newsItem.date).toLocaleDateString()}</Text>
                 </Flex>
                 <Stack>

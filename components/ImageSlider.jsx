@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Text, Flex, Button, Badge } from "@chakra-ui/react";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 const ImageSlider = ({ slides }) => {
@@ -44,8 +44,10 @@ const ImageSlider = ({ slides }) => {
         >
           <FaArrowLeft />
         </Button>
-        <Link href={`/news/id/${slides[currentIndex]._id}`}>
+        <Link href={`/news/${slides[currentIndex]._id}`}>
+        
           <Box
+            w={{ base: "380px", md: "760px" }}
             h={{ base: "200px", md: "350px" }}
             color={"white"}
             borderRadius={"12px"}
@@ -53,18 +55,19 @@ const ImageSlider = ({ slides }) => {
             backgroundPosition="center"
             backgroundRepeat="no-repeat"
             backgroundSize="100% 100%"
-            paddingTop={{ base: "120px", md: "275px" }}
+            paddingTop={{ base: "140px", md: "265px" }}
           >
             <Text
               borderBottomLeftRadius={"12px"}
               borderBottomRightRadius={"12px"}
-              padding={"20px"}
+              padding={"10px 20px"}
               fontSize={{ base: "14px", md: "24px" }}
               fontWeight="bold"
               color={"white"}
+              h={{ base: "60px", md: "85px" }}
               backgroundColor={"RGBA(0, 0, 0, 0.64)"}
             >
-              {slides[currentIndex].heading.slice(0, 69) + "..."}
+              {slides[currentIndex].heading}
             </Text>
           </Box>
         </Link>

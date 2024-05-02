@@ -1,8 +1,16 @@
 "use client";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import UnAuthorized from "./UnAuthorized";
+// const Redirect = ({ to }) => {
+//   const router = useRouter();
+//   useEffect(() => {
+//     router.push(to);
+//   }, [to]);
+//   return null;
+// };
 function PrivateRoutes({ children }) {
   const { auth, role } = useSelector((store) => store.auth);
 
@@ -12,11 +20,10 @@ function PrivateRoutes({ children }) {
     } else if (role === "newsEditor") {
       return children;
     } else {
-      return <Navigate to={"/unauthorized"} />;
+      return <UnAuthorized />;
     }
   }
-
-  return <Navigate to={"/login"} />;
+  return <UnAuthorized />;
 }
 
 export default PrivateRoutes;

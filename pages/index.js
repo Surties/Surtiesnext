@@ -1,22 +1,20 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import ImageSlider from "../Components/ImageSlider";
 import axios from "axios";
 import StickyBox from "react-sticky-box";
 
 import { Box, Center, Flex, Spinner, Text } from "@chakra-ui/react";
-
-import { LOGIN_LOADING } from "../redux/auth/auth.actiontype";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import Sidebar from "../components/Sidebar";
-import ImageSlider from "../components/ImageSlider";
-import BreakingNews from "../components/BreakingNews";
 import CategorizedNews from "../components/CategorizedNews";
-import Navbar from "../components/Navbar";
 
+import BreakingNews from "../Components/BreakingNews";
+import Sidebar from "../components/Sidebar";
+import { LOGIN_LOADING, LOGIN_SUCCESS } from "../redux/auth/auth.actiontype";
+import { useDispatch } from "react-redux";
+import Navbar from "../components/Navbar";
 axios.defaults.withCredentials = true;
 
-export default function Home() {
+function News() {
   const [slides, setSlides] = useState([{ img: "" }]);
   const [loading, setLoading] = useState(true);
   const [error1, setError] = useState(false);
@@ -28,13 +26,13 @@ export default function Home() {
   const [news, setNews] = useState([{ documents: [] }]);
   const [loading2, setLoading2] = useState(false);
   const dispatch = useDispatch();
-  const router = useRouter();
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://surtiesserver.onrender.com/news/breaking-news"
+        "https://surtiesserver.onrender.com/news/slider"
       );
-      setSlides(response.data);
+      setSlides(response.data.slider);
     } catch (error) {
       setError(!!error1);
     } finally {
@@ -54,30 +52,32 @@ export default function Home() {
         console.error("Error:", error.message);
       });
   };
-
   const getUser = () => {
-    if (first) {
-      dispatch({
-        type: LOGIN_LOADING,
+    dispatch({
+      type: LOGIN_LOADING,
+    });
+    axios
+      .get("https://surtiesserver.onrender.com/auth/signin-token", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: LOGIN_ERROR,
+          payload: err.response.data.msg,
+        });
       });
-      axios
-        .get("https://surtiesserver.onrender.com/auth/signin-token", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          SetFirst(false);
-
-          router.push("/");
-        })
-        .catch((err) => {});
-    } else SetFirst(true);
   };
   const breakingNewsFun = () => {
     axios
       .get("https://surtiesserver.onrender.com/news/breaking-news")
       .then((res) => {
-        console.log(res.data);
-        setBreakingNews(res.data);
+        setBreakingNews(res.data.breakingNews);
       })
       .catch((err) => {
         console.log(err);
@@ -93,47 +93,55 @@ export default function Home() {
     <>
       <Navbar />
       <Flex flexDirection={{ base: "column", md: "row" }}>
-        <Box backgroundColor={"#d91e26"} width={{ base: "100%", md: "20%" }}>
+        <Box backgroundColor={"#E2E8F0"} width={{ base: "100%", md: "20%" }}>
           <StickyBox offsetTop={20} offsetBottom={20}>
             <Sidebar />
           </StickyBox>
         </Box>
         <Box w={{ base: "100%", md: "76%" }}>
           <Flex marginTop={"20px"} justifyContent={"center"}>
-            <Box>
-              {loading ? (
-                <Center mt={"20px"}>
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="#d91e26"
-                    size="xl"
-                  />
-                </Center>
-              ) : (
-                <ImageSlider slides={slides} />
-              )}
-            </Box>
-          </Flex>
-          <>
-            {loading ? (
-              <></>
+            {slides[0] ? (
+              <Box>
+                {loading ? (
+                  <Center mt={"20px"}>
+                    <Spinner
+                      thickness="4px"
+                      speed="0.65s"
+                      emptyColor="gray.200"
+                      color="#d91e26"
+                      size="xl"
+                    />
+                  </Center>
+                ) : (
+                  <ImageSlider slides={slides} />
+                )}
+              </Box>
             ) : (
-              <>
-                <Box
-                  marginLeft={"5%"}
-                  marginTop={"20px"}
-                  marginBottom={"-30px"}
-                  fontWeight={"bold"}
-                  color={"#d91e26"}
-                >
-                  <Text>Top News</Text>
-                </Box>
-                <BreakingNews data={breakingNews} />
-              </>
+              ""
             )}
-          </>
+          </Flex>
+          {breakingNews[0] ? (
+            <>
+              {loading ? (
+                <></>
+              ) : (
+                <>
+                  <Box
+                    marginLeft={"5%"}
+                    marginTop={"20px"}
+                    marginBottom={"-30px"}
+                    fontWeight={"bold"}
+                    color={"#d91e26"}
+                  >
+                    <Text>Top News</Text>
+                  </Box>
+                  <BreakingNews data={breakingNews} />
+                </>
+              )}
+            </>
+          ) : (
+            ""
+          )}
           {!loading ? (
             !loading2 ? (
               <Center mt={"20px"}>
@@ -167,3 +175,5 @@ export default function Home() {
     </>
   );
 }
+
+export default News;

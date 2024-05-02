@@ -189,6 +189,7 @@ export function LoginForm() {
             <Box display={"flex"} gap={"6px"}>
               <Text>Dont Have Account </Text>
               <Link href="/signup">
+                {" "}
                 <Text color={"#d91e26"}>
                   {" "}
                   <b>Create One</b>

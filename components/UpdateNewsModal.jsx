@@ -1,27 +1,23 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Box,
   FormControl,
   FormLabel,
   Input,
-  Select,
   Flex,
   Stack,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
   Button,
   Grid,
   Text,
-  Textarea,
-  Radio,
-  RadioGroup,
   Switch,
 } from "@chakra-ui/react";
 import {
@@ -33,6 +29,12 @@ import {
 } from "firebase/storage";
 import { app, storage } from "../firebase/firebase";
 import axios from "axios";
+
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
+import { useSelector } from "react-redux";
+
 const initialFormData = {
   heading: "",
   subHeading: "",
@@ -45,14 +47,25 @@ const initialFormData = {
   thumbnail: null,
   breakingL: false,
 };
+const linkinit = {
+  instaLink: { link: "", content: "" },
+  youtubeLink: { link: "", content: "" },
+  facebookLink: { link: "", content: "" },
+  twitterLink: { link: "", content: "" },
+};
 
 function UpdateNewsModal({ id, fetchData }) {
   const [files, setFiles] = useState(null);
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedButtons, setSelectedButtons] = useState([]);
+  const [thumbnail, setThumbnail] = useState(null);
   const [uploading1, setUploading1] = useState(false);
   const [uploading2, setUploading2] = useState(false);
+  const [imgArticle, setImgArticle] = useState([]);
+  const [embededLink, setEmbededLink] = useState(linkinit);
 
+  const { user } = useSelector((el) => {
+    return el.auth;
+  });
   const handleChange = (e) => {
     const { name, value, type, files, checked } = e.target;
 
@@ -77,14 +90,16 @@ function UpdateNewsModal({ id, fetchData }) {
   const getSingleData = () => {
     axios.get(`https://surtiesserver.onrender.com/news/${id}`).then((res) => {
       setFormData(res.data);
-      setSelectedButtons(res.data.catagory);
+
+      setImgArticle(res.data.imgs);
+      setEmbededLink(res.data.embededLink);
     });
   };
 
   const handleChangeImg1 = async () => {
+    const file = thumbnail;
+
     setUploading1(true);
-    const file = formData.thumbnail[0][0];
-    console.log(file);
     if (file === null) return;
     const imgRef = ref(storage, `images/${file.name + Date.now()}`);
     try {
@@ -94,6 +109,7 @@ function UpdateNewsModal({ id, fetchData }) {
         ...formData,
         thumbnail: downloadURL,
       });
+
       setUploading1(false);
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -108,7 +124,8 @@ function UpdateNewsModal({ id, fetchData }) {
       array.push(storeImg(files[i]));
     }
     Promise.all(array).then((urls) => {
-      setFormData({ ...formData, imgs: formData.imgs.concat(urls) });
+      const objs = urls.map((url) => ({ img: url, content: "" }));
+      setImgArticle(imgArticle.concat(objs));
       setUploading2(false);
     });
   };
@@ -139,11 +156,20 @@ function UpdateNewsModal({ id, fetchData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const updatedFormData = {
+      ...formData,
+      author: user,
+      imgs: imgArticle,
+      embededLink: embededLink,
+    };
+    setFormData(updatedFormData);
     axios
-      .patch(`${"https://surtiesserver.onrender.com/news"}/${id}`, formData)
+      .patch(
+        `${"https://surtiesserver.onrender.com/news"}/${id}`,
+        updatedFormData
+      )
       .then((response) => {
         fetchData();
-        console.log(response);
       })
       .catch((error) => {
         console.error("Error updating resource:", error);
@@ -154,29 +180,119 @@ function UpdateNewsModal({ id, fetchData }) {
     setFormData({ ...formData, thumbnail: null });
   };
   const handleDelete1 = (el) => {
-    const newData = formData.imgs.filter((element) => {
-      return element !== el;
+    const newData = imgArticle.filter((element) => {
+      return element.img !== el;
     });
 
-    setFormData({ ...formData, imgs: newData });
+    setImgArticle(newData);
   };
+
   const handleButtonClick = (lable) => {
-    if (selectedButtons.includes(lable)) {
-      setSelectedButtons(selectedButtons.filter((item) => item !== lable));
-      setFormData({ ...formData, catagory: selectedButtons });
-    } else {
-      console.log(selectedButtons);
-      if (selectedButtons.length <= 3) {
-        setSelectedButtons([...selectedButtons, lable]);
-        setFormData({ ...formData, catagory: selectedButtons });
-      }
-    }
+    setFormData({ ...formData, catagory: lable });
+  };
+  var modules = {
+    toolbar: [
+      [{ size: ["small", false, "large", "huge"] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["images", "link"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+        { align: [] },
+      ],
+      [
+        {
+          color: [
+            "#000000",
+            "#e60000",
+            "#ff9900",
+            "#ffff00",
+            "#008a00",
+            "#0066cc",
+            "#9933ff",
+            "#ffffff",
+            "#facccc",
+            "#ffebcc",
+            "#ffffcc",
+            "#cce8cc",
+            "#cce0f5",
+            "#ebd6ff",
+            "#bbbbbb",
+            "#f06666",
+            "#ffc266",
+            "#ffff66",
+            "#66b966",
+            "#66a3e0",
+            "#c285ff",
+            "#888888",
+            "#a10000",
+            "#b26b00",
+            "#b2b200",
+            "#006100",
+            "#0047b2",
+            "#6b24b2",
+            "#444444",
+            "#5c0000",
+            "#663d00",
+            "#666600",
+            "#003700",
+            "#002966",
+            "#3d1466",
+            "custom-color",
+          ],
+        },
+      ],
+    ],
+  };
+
+  var formats = [
+    "header",
+    "height",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "color",
+    "bullet",
+    "indent",
+    "link",
+    "align",
+    "size",
+    "images",
+  ];
+
+  const handleProcedureContentChange = (content) => {
+    setFormData({ ...formData, article: content });
+  };
+  const handleProcedureContentChange2 = (index, newContent) => {
+    const updatedImgArticle = [...imgArticle];
+    updatedImgArticle[index].content = newContent;
+    setImgArticle(updatedImgArticle);
   };
   useEffect(() => {
     getSingleData();
   }, []);
   const handleClick = () => {
     onOpen();
+  };
+  const handleQuillChange = (name, content) => {
+    setEmbededLink((prevLinks) => ({
+      ...prevLinks,
+      [name]: { ...prevLinks[name], content: content },
+    }));
+  };
+  const handleChange3 = (e) => {
+    const { name, value } = e.target;
+
+    setEmbededLink((prevLinks) => ({
+      ...prevLinks,
+      [name]: { ...prevLinks[name], link: value },
+    }));
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -207,7 +323,6 @@ function UpdateNewsModal({ id, fetchData }) {
                         onChange={handleChange}
                       />
                     </FormControl>
-
                     <FormControl mb={4}>
                       <FormLabel>Subheading</FormLabel>
                       <Input
@@ -218,17 +333,22 @@ function UpdateNewsModal({ id, fetchData }) {
                         onChange={handleChange}
                       />
                     </FormControl>
-                    <FormControl mb={4}>
-                      <FormLabel>Article</FormLabel>
-                      <Textarea
-                        focusBorderColor="#d91e26"
-                        name="article"
-                        className="jobProfileSelector"
-                        rows={6}
+                    <Box
+                      marginTop={"20px"}
+                      marginBottom={"60px"}
+                      display={"grid"}
+                      justifyContent={"center"}
+                    >
+                      <ReactQuill
                         value={formData.article}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
+                        theme="snow"
+                        modules={modules}
+                        formats={formats}
+                        placeholder="write your content ...."
+                        onChange={handleProcedureContentChange}
+                        style={{ height: "220px" }}
+                      ></ReactQuill>
+                    </Box>{" "}
                     <FormControl mb={4}>
                       <FormLabel>Thumbnail</FormLabel>
                       <Flex gap={"10px"}>
@@ -236,9 +356,12 @@ function UpdateNewsModal({ id, fetchData }) {
                           focusBorderColor="#d91e26"
                           type="file"
                           name="thumbnail"
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            setThumbnail(e.target.files[0]);
+                          }}
                         />
                         <Button
+                          isDisabled={thumbnail == null}
                           pos={"static"}
                           loadingText=""
                           bg={"#d91e26"}
@@ -312,11 +435,11 @@ function UpdateNewsModal({ id, fetchData }) {
                       </Flex>
                     </FormControl>
                     <Box>
-                      {typeof formData.imgs[0] !== "string" ? (
+                      {!imgArticle[0] ? (
                         <></>
                       ) : (
                         <Flex gap={"10px"}>
-                          {formData.imgs.map((el, index) => {
+                          {imgArticle.map((el, index) => {
                             return (
                               <Flex
                                 justifyContent={"center"}
@@ -330,24 +453,39 @@ function UpdateNewsModal({ id, fetchData }) {
                                     width: "160px",
                                     borderRadius: "10px",
                                   }}
-                                  src={el}
+                                  src={el.img}
                                   alt=""
                                 />
                                 <Button
                                   type="button"
-                                  onClick={() => handleDelete1(el)}
+                                  onClick={() => handleDelete1(el.img)}
                                   width={"100px"}
                                   colorScheme="red"
                                 >
                                   Delete
                                 </Button>
+                                <Flex h={{ base: "334px", md: "" }} mb={4}>
+                                  <ReactQuill
+                                    theme="snow"
+                                    modules={modules}
+                                    value={el.content}
+                                    formats={formats}
+                                    placeholder="Write your content ..."
+                                    onChange={(newContent) =>
+                                      handleProcedureContentChange2(
+                                        index,
+                                        newContent
+                                      )
+                                    }
+                                    style={{ height: "200px" }}
+                                  ></ReactQuill>
+                                </Flex>
                               </Flex>
                             );
                           })}
                         </Flex>
                       )}
                     </Box>
-
                     <Flex mt={"20px"} mb={"20px"} gap={"10px"}>
                       <FormControl columns={{ base: 2, lg: 4 }}>
                         <Flex alignItems={"center"}>
@@ -380,6 +518,123 @@ function UpdateNewsModal({ id, fetchData }) {
                       </FormControl>
                     </Flex>
                     <Box>
+                      <FormControl marginTop={"10px"} mb={4}>
+                        <FormLabel fontWeight={"bold"}>
+                          Instagram Link
+                        </FormLabel>
+                        <Input
+                          focusBorderColor="#d91e26"
+                          type="text"
+                          name="instaLink"
+                          value={embededLink.instaLink.link}
+                          onChange={handleChange3}
+                        />
+                        <Box
+                          marginTop={"20px"}
+                          marginBottom={"60px"}
+                          display={"grid"}
+                          justifyContent={"center"}
+                        >
+                          <ReactQuill
+                            value={embededLink.instaLink.content}
+                            theme="snow"
+                            modules={modules}
+                            formats={formats}
+                            placeholder="write your content ...."
+                            onChange={(content) =>
+                              handleQuillChange("instaLink", content)
+                            }
+                            style={{ height: "220px" }}
+                          ></ReactQuill>
+                        </Box>
+                      </FormControl>
+
+                      <FormControl marginTop={"10px"} mb={4}>
+                        <FormLabel fontWeight={"bold"}>YouTube Link</FormLabel>
+                        <Input
+                          focusBorderColor="#d91e26"
+                          type="text"
+                          name="youtubeLink"
+                          value={embededLink.youtubeLink.link}
+                          onChange={handleChange3}
+                        />
+                        <Box
+                          marginTop={"20px"}
+                          marginBottom={"60px"}
+                          display={"grid"}
+                          justifyContent={"center"}
+                        >
+                          <ReactQuill
+                            value={embededLink.youtubeLink.content}
+                            theme="snow"
+                            modules={modules}
+                            formats={formats}
+                            placeholder="write your content ...."
+                            onChange={(content) =>
+                              handleQuillChange("youtubeLink", content)
+                            }
+                            style={{ height: "220px" }}
+                          ></ReactQuill>
+                        </Box>
+                      </FormControl>
+
+                      <FormControl marginTop={"10px"} mb={4}>
+                        <FormLabel fontWeight={"bold"}>Facebook Link</FormLabel>
+                        <Input
+                          focusBorderColor="#d91e26"
+                          type="text"
+                          name="facebookLink"
+                          value={embededLink.facebookLink.link}
+                          onChange={handleChange3}
+                        />
+                        <Box
+                          marginTop={"20px"}
+                          marginBottom={"60px"}
+                          display={"grid"}
+                          justifyContent={"center"}
+                        >
+                          <ReactQuill
+                            value={embededLink.facebookLink.content}
+                            theme="snow"
+                            modules={modules}
+                            formats={formats}
+                            placeholder="write your content ...."
+                            onChange={(content) =>
+                              handleQuillChange("facebookLink", content)
+                            }
+                            style={{ height: "220px" }}
+                          ></ReactQuill>
+                        </Box>
+                      </FormControl>
+
+                      <FormControl mb={4}>
+                        <FormLabel fontWeight={"bold"}>Twitter Link</FormLabel>
+                        <Input
+                          focusBorderColor="#d91e26"
+                          type="text"
+                          name="twitterLink"
+                          value={embededLink.twitterLink.link}
+                          onChange={handleChange3}
+                        />
+                        <Box
+                          marginTop={"20px"}
+                          marginBottom={"60px"}
+                          display={"grid"}
+                          justifyContent={"center"}
+                        >
+                          <ReactQuill
+                            value={embededLink.twitterLink.content}
+                            theme="snow"
+                            modules={modules}
+                            formats={formats}
+                            placeholder="write your content ...."
+                            onChange={(content) =>
+                              handleQuillChange("twitterLink", content)
+                            }
+                            style={{ height: "220px" }}
+                          ></ReactQuill>
+                        </Box>
+                      </FormControl>
                       <FormLabel>Catagory</FormLabel>
                       <Grid
                         templateColumns={"repeat(3, 1fr)"}
@@ -388,38 +643,30 @@ function UpdateNewsModal({ id, fetchData }) {
                       >
                         {[
                           "country",
-                          "gujrati",
-                          "Surat",
-                          "National",
+                          "gujarat",
+                          "surat",
+                          "national",
                           "entertainment",
                           "cricket",
                           "religion",
                           "surties",
                         ].map((label, index) => (
                           <Button
-                            key={label + index}
+                            key={index}
                             _hover={{ border: "1px solid #d91e26" }}
                             fontSize={"14px"}
+                            fontWeight={"400"}
                             color={
-                              selectedButtons.includes(label)
-                                ? "white"
-                                : "#d91e26"
+                              formData.catagory == label ? "white" : "#d91e26"
                             }
-                            onClick={() => {
-                              handleButtonClick(label, index);
-                            }}
+                            onClick={() => handleButtonClick(label)}
                             backgroundColor={
-                              selectedButtons.includes(label)
+                              formData.catagory == label
                                 ? "#d91e26"
                                 : "transparent"
                             }
                           >
-                            <Text
-                              fontWeight={"400"}
-                              textTransform={"capitalize"}
-                            >
-                              {label}
-                            </Text>
+                            <Text textTransform={"capitalize"}> {label}</Text>
                           </Button>
                         ))}
                       </Grid>

@@ -22,7 +22,7 @@ import axios from "axios";
 
 import { storage } from "../firebase/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { EMAIL_UPDATE } from "../redux/auth/auth.actiontype";
+import { EMAIL_UPDATE } from "../Redux/auth/auth.actiontype";
 const Profile = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,7 @@ const Profile = () => {
   const { email, id } = useSelector((store) => {
     return store.auth;
   });
+
   const dispatch = useDispatch();
   const inputFileRef = useRef();
   const onBtnClick = () => {
@@ -225,3 +226,4 @@ const Profile = () => {
   );
 };
 export default Profile;
+

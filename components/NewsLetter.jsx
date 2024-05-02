@@ -1,4 +1,3 @@
-// NewsletterSubscription.js
 "use client";
 import { LuMailPlus } from "react-icons/lu";
 import React, { useState } from "react";
@@ -19,7 +18,6 @@ const Newsletter = () => {
 
   const handleChange = (event) => {
     setEmail(event.target.value);
-    console.log(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -34,18 +32,16 @@ const Newsletter = () => {
   const postData = (email) => {
     axios
       .post("https://surtiesserver.onrender.com/email-list", { email })
-      .then((response) => {
-        console.log("Response:", response.data);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.error("Error:", error);
       });
   };
   return (
-    <Box maxW="md" mx="auto">
+    <Box p={"25px 4px"} maxW="md" mx="auto">
       <>
         {subscribed ? (
-          <Center color={"white"} fontWeight={"bold"} textAlign={"center"}>
+          <Center color={"black"} fontWeight={"bold"} textAlign={"center"}>
             {" "}
             <Text>Thank you for subscribing!</Text>
           </Center>
@@ -54,38 +50,39 @@ const Newsletter = () => {
             <Center
               flexDirection={"column"}
               textAlign={"center"}
-              color={"white"}
+              color={"black"}
             >
-              <Text marginBottom={"10px"} fontWeight={"bold"} fontSize={"18px"}>
+              <Text marginBottom={"10px"} fontWeight={"bold"} fontSize={"16px"}>
                 Subscribe to Our Newsletter{" "}
               </Text>
             </Center>
             <form onSubmit={handleSubmit}>
-              <FormControl>
-                <Flex marginTop={"10px"}>
+              <FormControl marginTop={"10px"} p={"20px 5px"}>
+                <Flex borderRadius={"6px"} border={"1px solid black"}>
                   <Input
-                    color={"white"}
-                    _placeholder={{ color: "white" }}
+                    color={"black"}
+                    _placeholder={{ color: "black" }}
                     placeholder="Your email address"
                     autoComplete="off"
                     borderRight={"none"}
                     pos={"static"}
                     focusBorderLeft="none"
                     name="email"
-                    focusBorderColor="white"
+                    focusBorderColor="none"
                     borderRightRadius="0"
                     onChange={handleChange}
+                    _hover={{ color: "#E2E8F0" }}
                   />
 
                   <Button
                     type="submit"
                     pos={"static"}
                     marginLeft={"-1px"}
-                    border={"1px solid #E2E8F0"}
+                    border={"1px solid black"}
                     borderLeft={"none"}
                     borderLeftRadius="0"
-                    color={"white"}
-                    _hover={{ color: "#d91e26", backgroundColor: "white" }}
+                    color={"black"}
+                    _hover={{ color: "#E2E8F0", backgroundColor: "black" }}
                     variant={"ghost"}
                   >
                     <LuMailPlus fontSize={"20px"} />

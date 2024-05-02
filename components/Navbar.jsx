@@ -14,35 +14,31 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Button,
 } from "@chakra-ui/react";
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { FaRegUserCircle } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-// // import { Link } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import axios from "axios";
-// import { LOGOUT_SUCCESS } from "../Redux/auth/auth.actiontype";
+import { useDispatch, useSelector } from "react-redux";
+
+import axios from "axios";
+import { LOGOUT_SUCCESS } from "../redux/auth/auth.actiontype";
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
-  const { user, auth, role, profile } = useSelector((store) => {
+  const { user, auth, role } = useSelector((store) => {
     return store.auth;
   });
 
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    console.log("last");
     try {
       const response = await axios.get(
         "https://surtiesserver.onrender.com/auth/logout"
       );
 
       dispatch({ type: LOGOUT_SUCCESS });
-      console.log(response.data);
     } catch (error) {
       console.error("Error occurred during logout:", error);
     }
@@ -104,15 +100,17 @@ export default function Navbar() {
             <Flex
               display={{ base: "none", md: "flex" }}
               alignItems={"center"}
-              gap={"15px"}
-              ml={10}
+              gap={"30px"}
+              marginRight={"20px"}
+              paddingLeft={"40px"}
+              paddingRight={"40px"}
             >
-              <Link href={"/news/catagory/top"}>
+              <Link href={"/trending-news"}>
                 <Text fontWeight={"700"} color={"white"}>
                   Top
                 </Text>
               </Link>
-              <Link href={"/news/catagory/latest"}>
+              <Link href={"/breaking-news"}>
                 <Text fontWeight={"700"} color={"white"}>
                   Latest
                 </Text>
@@ -129,6 +127,7 @@ export default function Navbar() {
                 </Text>
               </Link>
               <Link href={"/career"}>
+                {" "}
                 <Text fontWeight={"700"} color={"white"}>
                   Career
                 </Text>
@@ -166,7 +165,7 @@ export default function Navbar() {
               <MenuList>
                 <MenuItem>
                   {!auth ? (
-                    <Link href="/login" style={{ width: "100%" }}>
+                    <Link style={{ width: "100%" }} href="/login">
                       <Box display="flex" gap={2}>
                         Login
                       </Box>
@@ -180,8 +179,7 @@ export default function Navbar() {
                 </MenuItem>
                 {role == "admin" || role == "newsEditor" ? (
                   <MenuItem>
-                    {" "}
-                    <Link href={"/admin"}>{role}</Link>{" "}
+                    <Link href={"/admin"}>{role}</Link>
                   </MenuItem>
                 ) : (
                   ""
@@ -190,8 +188,7 @@ export default function Navbar() {
                   <MenuItem>
                     <Link style={{ width: "100%" }} href={"/profile"}>
                       Profile
-                    </Link>{" "}
-                    *
+                    </Link>
                   </MenuItem>
                 ) : (
                   ""
@@ -255,11 +252,11 @@ const MobileNavItem = ({ label, href }) => {
 const NAV_ITEMS = [
   {
     label: "Top",
-    href: "/news/catagory/top",
+    href: "/trending-news",
   },
   {
     label: "Latest",
-    href: "/news/catagory/latest",
+    href: "/breaking-news",
   },
 
   {

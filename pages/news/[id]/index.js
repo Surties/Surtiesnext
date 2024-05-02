@@ -1,32 +1,30 @@
+"use-client";
 import React, { useEffect, useState } from "react";
-
 import { Box, Center, Flex, Spinner, Text } from "@chakra-ui/react";
-
 import StickyBox from "react-sticky-box";
-
 import axios from "axios";
-import { useRouter } from "next/router";
+import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
 import DetailNewsComponent from "../../../components/DetailNewsComponent";
-import ShareOn from "../../../components/ShareOn";
 import RecommendNews from "../../../components/RecommendedNews";
-import Navbar from "../../../components/Navbar";
-
+import ShareOn from "../../../components/ShareOn";
+import { useRouter } from "next/router";
 function DetailNews() {
-  // const router = useRouter;
-  // // const id = router.query.id;
-  const id = "6603113481d2b4376b8e0660";
   const [responseData, setResponseData] = useState([]);
   const [articleData, setArticleData] = useState({ imgs: [] });
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [category, setCategory] = useState("");
   const [error1, setError] = useState(false);
+  const router = useRouter();
+  const { id } = router.query;
   const fetchData2 = () => {
     setLoading(true);
     axios
       .get(`https://surtiesserver.onrender.com/news/${id}`)
       .then((response) => {
         setArticleData(response.data);
-
+        setCategory(response.data.catagory);
         setLoading(false);
       })
       .catch((error) => {
@@ -55,14 +53,25 @@ function DetailNews() {
       console.error("Error fetching data:", error);
     }
   };
+  const fetchData3 = async () => {
+    try {
+      const response = await axios.get(
+        `https://surtiesserver.onrender.com/news?filter=${category}`
+      );
+      setData(response.data.newsItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
     fetchData();
-    patchData();
     fetchData2();
+    patchData();
+    fetchData3();
   }, [id]);
   return (
-    <>
-      <Navbar/>
+    <div>
+      <Navbar />
       {loading ? (
         <Center mt={"20px"}>
           <Spinner
@@ -75,7 +84,7 @@ function DetailNews() {
         </Center>
       ) : (
         <Flex flexDirection={{ base: "column", md: "row" }}>
-          <Box backgroundColor={"#d91e26"} width={{ base: "100%", md: "20%" }}>
+          <Box backgroundColor={"#E2E8F0"} width={{ base: "100%", md: "20%" }}>
             <StickyBox offsetTop={20} offsetBottom={20}>
               <Sidebar />
             </StickyBox>
@@ -85,9 +94,18 @@ function DetailNews() {
             flexDirection={{ base: "column", md: "row" }}
           >
             <Box>
-              <DetailNewsComponent articleData={articleData} para={id} />
+              {!articleData.article ? (
+                ""
+              ) : (
+                <DetailNewsComponent
+                  articleData={articleData}
+                  category={category}
+                  data={data}
+                />
+              )}
             </Box>
           </Flex>
+
           <Box backgroundColor="#ffffff" width={{ base: "100%", md: "30%" }}>
             <StickyBox offsetTop={20} offsetBottom={20}>
               <ShareOn />
@@ -105,7 +123,7 @@ function DetailNews() {
           </Box>
         </Flex>
       )}
-    </>
+    </div>
   );
 }
 

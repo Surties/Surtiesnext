@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar";
 function Career() {
   return (
     <div>
-      <Navbar />
+      <Navbar/>
       <CareerForm />
     </div>
   );

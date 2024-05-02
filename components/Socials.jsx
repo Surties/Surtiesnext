@@ -1,35 +1,32 @@
-"use client";
-import { Box, Center, Flex, Grid, Heading, Text } from "@chakra-ui/react";
-import Link from "next/link";
+import { Center, Flex, Text } from "@chakra-ui/react";
 import React from "react";
-import { FaFacebookSquare, FaInstagram, FaYoutube } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
 
+import Link from "next/link";
 function Socials() {
   const data = [
     {
       name: "@surties",
       link: "https://www.instagram.com/surties/",
-      logo: <FaInstagram />,
+      logo: "https://firebasestorage.googleapis.com/v0/b/surtieswebapplication.appspot.com/o/Assets%2Finstagram.png?alt=media&token=5ab443b8-9e8f-48d0-949d-436bba1c542c",
     },
     {
       name: "surties",
       link: "https://www.facebook.com/surties.india/",
-      logo: <FaFacebookSquare />,
+      logo: "https://firebasestorage.googleapis.com/v0/b/surtieswebapplication.appspot.com/o/Assets%2Ffacebook.png?alt=media&token=e0bdd9fa-2e0c-415f-8dbc-64b6736f70e4",
     },
     {
       name: "@surties",
       link: "https://www.youtube.com/channel/UC9YTQy5MpL5t1ODCQdK0tWA",
-      logo: <FaYoutube />,
+      logo: "https://firebasestorage.googleapis.com/v0/b/surtieswebapplication.appspot.com/o/Assets%2Fyoutube.png?alt=media&token=a4d9a55a-b075-4470-b56a-7b759fe49cb0",
     },
     {
       link: "https://twitter.com/i/flow/login?redirect_after_login=%2FSurtiesIndia",
       name: "@Surtiesindia",
-      logo: <FaSquareXTwitter />,
+      logo: "https://firebasestorage.googleapis.com/v0/b/surtieswebapplication.appspot.com/o/Assets%2Ftwitter.png?alt=media&token=08e479d6-772f-420b-aa32-7a5519ba435f",
     },
   ];
   return (
-    <Center color={"white"} flexDirection={"column"} paddingTop={"30px"}>
+    <Center color={"black"} flexDirection={"column"} paddingTop={"30px"}>
       <Text fontSize={"16px"} fontWeight={"600"} marginBottom={"10px"}>
         Find us on
       </Text>
@@ -42,7 +39,9 @@ function Socials() {
         {data.map((el, index) => {
           return (
             <Flex key={el.link + index} fontSize={"24px"} alignItems={"center"}>
-              <a href={el.link}>{el.logo}</a>
+              <a href={el.link}>
+                <img width={"25px"} src={el.logo} alt="" />
+              </a>
             </Flex>
           );
         })}

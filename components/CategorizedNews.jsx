@@ -7,6 +7,7 @@ import Link from "next/link";
 function CategorizedNews({ data, catagory, cata }) {
   return (
     <Link href={`/news/catagory/${cata}`}>
+    <>
       <Flex alignItems={"center"} mt={"3%"} mr={"2.4%"}>
         <Text
           fontWeight={"500"}
@@ -26,7 +27,7 @@ function CategorizedNews({ data, catagory, cata }) {
         <Box
           h={"0.5px"}
           w={"75%"}
-          border={"1px solid #d91e26 "}
+          border={"1px solid #718096 "}
           opacity={"0.5"}
         ></Box>
         <Button
@@ -58,7 +59,8 @@ function CategorizedNews({ data, catagory, cata }) {
           })}
         </Grid>
       </Flex>
-    </Link>
+    </>
+     </Link>
   );
 }
 
