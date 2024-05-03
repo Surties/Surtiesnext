@@ -65,13 +65,10 @@ const CareerForm = () => {
       const downloadURL = await getDownloadURL(snapshot.ref);
 
       try {
-        const response = await axios.post(
-          "https://surtiesserver.onrender.com/career",
-          {
-            ...formData,
-            file: downloadURL,
-          }
-        );
+        const response = await axios.post("/api/career", {
+          ...formData,
+          file: downloadURL,
+        });
         console.log(response);
         setUploading(false);
 

@@ -7,6 +7,8 @@ import {
   Textarea,
   Button,
   FormLabel,
+  Heading,
+  Center,
 } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -16,6 +18,7 @@ const ContactPageComp = () => {
   const [successMsg, setSuccessMsg] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const isValidEmail = (email) => {
     return /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email);
   };
@@ -83,13 +86,12 @@ const ContactPageComp = () => {
   const handlePostRequest = async (postData) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://surtiesserver.onrender.com/contact-us",
-        postData
-      );
+      const response = await axios.post("/api/contacts", postData);
       console.log(response);
       setSuccessMsg(true);
       setLoading(false);
+
+      console.log(response);
     } catch (error) {
       setLoading(false);
 
@@ -105,35 +107,27 @@ const ContactPageComp = () => {
       id="contact"
       p={8}
     >
+      <Center color={"#d91e26"}>
+        {" "}
+        <Heading>Contact Us</Heading>
+      </Center>
       <Box className="form">
         <form
           onSubmit={handleSubmit}
           encType="multipart/form-data"
           autoComplete="off"
         >
-          {!successMsg ? (
-            <>
-              <Box
-                textTransform={"capitalize"}
-                id="errormessage"
-                className={errorMsg ? "show" : ""}
-                color="#d91e26"
-                textAlign="center"
-                padding="15px"
-                fontWeight="600"
-                marginBottom="15px"
-              >
-                {errorMsg}
-              </Box>
+          {successMsg ? (
+            <Box h={"80vh"}>
               <FormControl mb={4}>
                 <FormLabel>Name</FormLabel>
                 <Input
+                  color={"black"}
                   name="name"
                   type="text"
                   value={contactData.name || ""}
                   onChange={(e) => handleChange(e)}
                   onBlur={handleBlur}
-                  color="#d91e26"
                   focusBorderColor="#d91e26"
                 />
               </FormControl>
@@ -154,6 +148,7 @@ const ContactPageComp = () => {
                 <Input
                   name="subject"
                   type="text"
+                  color={"black"}
                   value={contactData.subject || ""}
                   onChange={(e) => handleChange(e)}
                   onBlur={handleBlur}
@@ -168,6 +163,7 @@ const ContactPageComp = () => {
                   value={contactData.email || ""}
                   onChange={(e) => handleChange(e)}
                   onBlur={handleBlur}
+                  color={"black"}
                   focusBorderColor="#d91e26"
                 />
               </FormControl>
@@ -176,6 +172,7 @@ const ContactPageComp = () => {
                 <Textarea
                   name="message"
                   type="text"
+                  color={"black"}
                   value={contactData.message || ""}
                   onChange={(e) => handleChange(e)}
                   onBlur={handleBlur}
@@ -185,6 +182,7 @@ const ContactPageComp = () => {
               </FormControl>
               <p className="text-right mb-0">
                 <Button
+                  isDisabled={errorMsg}
                   isLoading={loading}
                   loadingText="Submitting"
                   type="submit"
@@ -195,16 +193,17 @@ const ContactPageComp = () => {
                   Submit Now
                 </Button>
               </p>
-            </>
+            </Box>
           ) : (
             <Box
+              h={"80vh"}
               className="show"
               id="sendmessage"
               color="#007bff"
-              border="1px solid #007bff"
               textAlign="center"
-              padding="15px"
-              fontWeight="600"
+                padding="15px"
+                fontSize={'20px'}
+              fontWeight="700"
               marginBottom="15px"
             >
               Thank you for your message. We will contact you soon.

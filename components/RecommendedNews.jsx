@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex, Img, Text } from "@chakra-ui/react";
-
+import Link from "next/link";
 
 function RecommendNews({ data }) {
   return (
@@ -16,7 +16,7 @@ function RecommendNews({ data }) {
             borderRadius={"6px"}
           >
             {
-              // <Link href={`/news/id/${el._id}`}>
+              <Link href={`/news/id/${el._id}`}>
                 <Flex>
                   <Img
                     h={"100px"}
@@ -31,7 +31,7 @@ function RecommendNews({ data }) {
                     </Text>
                   </Box>
                 </Flex>
-              // </Link>
+              </Link>
             }
           </Box>
         );

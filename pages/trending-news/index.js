@@ -22,7 +22,7 @@ function TrendingNews() {
   const fetchData = (currentPage) => {
     setLoading(true);
     axios
-      .get(`https://surtiesserver.onrender.com/news/slider?page=${currentPage}`)
+      .get(`/api/newsData/trending-news?page=${currentPage}`)
       .then((res) => {
         setData(res.data.slider);
         setLoading(false);

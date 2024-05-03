@@ -36,7 +36,7 @@ function DetailNews() {
   const patchData = () => {
     setLoading(true);
     axios
-      .patch(`https://surtiesserver.onrender.com/news/topweek/${id}`)
+      .patch(`/api/newsData/topweek/${id}`)
       .then((response) => {})
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -45,10 +45,9 @@ function DetailNews() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "https://surtiesserver.onrender.com/news/topweek"
-      );
+      const response = await axios.get("/api/newsData/topweek");
       setResponseData(response.data);
+      console.log(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -56,7 +55,7 @@ function DetailNews() {
   const fetchData3 = async () => {
     try {
       const response = await axios.get(
-        `https://surtiesserver.onrender.com/news?filter=${category}`
+        `/api/newsData/catagory?filter=${category}`
       );
       setData(response.data.newsItems);
     } catch (error) {

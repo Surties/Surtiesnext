@@ -27,9 +27,7 @@ function CatagoryPage() {
   const fetchData = () => {
     setLoading(true);
     axios
-      .get(
-        `https://surtiesserver.onrender.com/news?page=${currentPage}&filter=${catagory}`
-      )
+      .get(`/api/newsData?page=${currentPage}&filter=${catagory}`)
       .then((res) => {
         setData(res.data.newsItems);
         setTotalPages(res.data.totalPages);
@@ -80,7 +78,7 @@ function CatagoryPage() {
             </Flex>
           </>
         ) : (
-          <Flex w={'75%'}>
+          <Flex w={"75%"}>
             <Grid
               templateColumns={{
                 base: "repeat(2,1fr)",

@@ -33,9 +33,7 @@ function News() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "https://surtiesserver.onrender.com/news/slider"
-      );
+      const response = await axios.get("/api/newsData/trending-news");
       setSlides(response.data.slider);
     } catch (error) {
       setError(!!error1);
@@ -46,7 +44,7 @@ function News() {
   const getNews = () => {
     setLoading2(true);
     axios
-      .get("https://surtiesserver.onrender.com/news/grouped")
+      .get("/api/newsData/grouped")
       .then((response) => {
         setNews(response.data);
         setLoading(false);
@@ -79,7 +77,7 @@ function News() {
   };
   const breakingNewsFun = () => {
     axios
-      .get("https://surtiesserver.onrender.com/news/breaking-news")
+      .get("/api/newsData/breaking-news")
       .then((res) => {
         setBreakingNews(res.data.breakingNews);
       })

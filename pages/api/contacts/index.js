@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-dotenv.config();
+
 const USER = process.env.USER;
 const PASS = process.env.PASS;
 const Contacts = async (req, res) => {
