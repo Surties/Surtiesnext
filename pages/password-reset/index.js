@@ -13,6 +13,7 @@ import axios from "axios";
 import React, { useState } from "react";
 
 import Link from "next/link";
+import Navbar from "../../components/Navbar";
 
 function ResetPage() {
   const [email, setEmail] = useState("");
