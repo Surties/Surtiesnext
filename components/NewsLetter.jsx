@@ -71,7 +71,6 @@ const Newsletter = () => {
                     focusBorderColor="none"
                     borderRightRadius="0"
                     onChange={handleChange}
-                    _hover={{ color: "#E2E8F0" }}
                   />
 
                   <Button

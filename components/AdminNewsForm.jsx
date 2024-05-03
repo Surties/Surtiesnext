@@ -24,7 +24,8 @@ import { app, storage } from "../firebase/firebase";
 import axios from "axios";
 import { FaUpload } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "quill/dist/quill.snow.css";
 const initialFormData = {
   heading: "",

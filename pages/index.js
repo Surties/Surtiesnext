@@ -9,7 +9,11 @@ import CategorizedNews from "../components/CategorizedNews";
 
 import BreakingNews from "../components/BreakingNews";
 import Sidebar from "../components/Sidebar";
-import { LOGIN_LOADING, LOGIN_SUCCESS } from "../redux/auth/auth.actiontype";
+import {
+  LOGIN_ERROR,
+  LOGIN_LOADING,
+  LOGIN_SUCCESS,
+} from "../redux/auth/auth.actiontype";
 import { useDispatch } from "react-redux";
 import Navbar from "../components/Navbar";
 axios.defaults.withCredentials = true;
