@@ -31,7 +31,7 @@ const Newsletter = () => {
   };
   const postData = (email) => {
     axios
-      .post("https://surtiesserver.onrender.com/email-list", { email })
+      .post("/api/newsletter", { email })
       .then((response) => {})
       .catch((error) => {
         console.error("Error:", error);

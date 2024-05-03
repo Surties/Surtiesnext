@@ -117,7 +117,7 @@ const ContactPageComp = () => {
           encType="multipart/form-data"
           autoComplete="off"
         >
-          {successMsg ? (
+          {!successMsg ? (
             <Box h={"80vh"}>
               <FormControl mb={4}>
                 <FormLabel>Name</FormLabel>
@@ -201,8 +201,8 @@ const ContactPageComp = () => {
               id="sendmessage"
               color="#007bff"
               textAlign="center"
-                padding="15px"
-                fontSize={'20px'}
+              padding="15px"
+              fontSize={"20px"}
               fontWeight="700"
               marginBottom="15px"
             >

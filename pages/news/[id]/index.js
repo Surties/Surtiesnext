@@ -21,11 +21,12 @@ function DetailNews() {
   const fetchData2 = () => {
     setLoading(true);
     axios
-      .get(`https://surtiesserver.onrender.com/news/${id}`)
+      .get(`/api/newsData/id/${id}`)
       .then((response) => {
         setArticleData(response.data);
         setCategory(response.data.catagory);
         setLoading(false);
+        console.log(response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

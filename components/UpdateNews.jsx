@@ -40,7 +40,7 @@ function UpdateNews() {
   const handleDelete = (el) => {
     setLoad(true);
     axios
-      .delete(`${"https://surtiesserver.onrender.com/news"}/${el}`)
+      .delete(`${"/api/newsData/id"}/${el}`)
       .then((response) => {
         setLoad(!load);
         fetchData();
@@ -52,7 +52,7 @@ function UpdateNews() {
   };
   const fetchData = () => {
     setLoad(true);
-    const apiUrl = `https://surtiesserver.onrender.com/news?page=${pageNumber}&search=${query}&filter=${filter}`;
+    const apiUrl = `/api/newsData?page=${pageNumber}&search=${query}&filter=${filter}`;
 
     axios
       .get(apiUrl)

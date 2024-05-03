@@ -43,10 +43,7 @@ function NewsSlider() {
     }
 
     try {
-      const response = await axios.post(
-        "https://surtiesserver.onrender.com/slider",
-        formData
-      );
+      const response = await axios.post("/api/newsData/trending-news", formData);
       console.log(response);
       setUploading(false);
       setFormData(init);

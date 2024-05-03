@@ -88,7 +88,7 @@ function UpdateNewsModal({ id, fetchData }) {
     }
   };
   const getSingleData = () => {
-    axios.get(`https://surtiesserver.onrender.com/news/${id}`).then((res) => {
+    axios.get(`/api/newsData/id/${id}`).then((res) => {
       setFormData(res.data);
 
       setImgArticle(res.data.imgs);
@@ -164,10 +164,7 @@ function UpdateNewsModal({ id, fetchData }) {
     };
     setFormData(updatedFormData);
     axios
-      .patch(
-        `${"https://surtiesserver.onrender.com/news"}/${id}`,
-        updatedFormData
-      )
+      .patch(`${"/api/newsData/id"}/${id}`, updatedFormData)
       .then((response) => {
         fetchData();
       })

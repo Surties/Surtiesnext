@@ -18,7 +18,7 @@ function BreakingNews() {
   const fetchData = () => {
     setLoading(true);
     axios
-      .get(`https://surtiesserver.onrender.com/news/breaking-news`)
+      .get(`/api/newsData/breaking-news`)
       .then((res) => {
         setData(res.data.breakingNews);
         setTotalPages(res.data.totalPages);
