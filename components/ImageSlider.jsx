@@ -45,17 +45,16 @@ const ImageSlider = ({ slides }) => {
           <FaArrowLeft />
         </Button>
         <Link href={`/news/${slides[currentIndex]._id}`}>
-        
           <Box
-            w={{ base: "380px", md: "760px" }}
-            h={{ base: "200px", md: "350px" }}
+            w={{ base: "280px", md: "760px" }}
+            h={{ base: "205px", md: "350px" }}
             color={"white"}
             borderRadius={"12px"}
             backgroundImage={`url(${slides[currentIndex].thumbnail})`}
             backgroundPosition="center"
             backgroundRepeat="no-repeat"
             backgroundSize="100% 100%"
-            paddingTop={{ base: "140px", md: "265px" }}
+            paddingTop={{ base: "130px", md: "265px" }}
           >
             <Text
               borderBottomLeftRadius={"12px"}
@@ -64,7 +63,7 @@ const ImageSlider = ({ slides }) => {
               fontSize={{ base: "14px", md: "24px" }}
               fontWeight="bold"
               color={"white"}
-              h={{ base: "60px", md: "85px" }}
+              h={{ base: "75px", md: "85px" }}
               backgroundColor={"RGBA(0, 0, 0, 0.64)"}
             >
               {slides[currentIndex].heading}
